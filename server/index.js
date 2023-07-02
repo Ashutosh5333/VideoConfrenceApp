@@ -19,23 +19,27 @@ const io = new Server(server);
 
 // socket connection
 
-let count = 0;
 
 io.on("connection", (socket) => {
-  console.log("A User is connected");
-  count++;
 
-  io.emit("newuser", count);
+  const emailTosocketmap = new Map();
 
-  socket.on("message", (msg) => {
-    socket.broadcast.emit("usermsg", msg);
-  });
+    // joined user 
+  socket.on("join-room", (data) =>{
+      const {roomId ,emailId} = data;
+      console.log("user", emailId , "Joinned Room", roomId )
+      emailTosocketmap.set(emailId, socket.id)  
+      socket.join(roomId)
+      socket.broadcast.to(roomId).emit("user-joined", {emailId});
+    })
+  
 
   socket.on("disconnect", function () {
-    count--;
-    console.log("User Disconnected", count);
-    io.emit("newuser", count);
+  
+    console.log("User Disconnected");
   });
+
+
 });
 
 
