@@ -11,15 +11,19 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useSocket } from "../Provider/Socket";
+import {useNavigate} from "react-router-dom"
 
 const Room = () => {
-  const socket = useSocket();
+  const {socket} = useSocket();
+  const navigate = useNavigate()
+
   const [email, setEmail] = useState(" ");
   const [roomId, setRoomId] = useState(" ");
 
-
+  
      const roomhandle = ({roomId}) =>{
        console.log("joinned", roomId)
+       navigate(`/room/${roomId}`)
      } 
 
       useEffect(() =>{
@@ -27,7 +31,7 @@ const Room = () => {
       },[socket])
 
   const handleJOinnedRoom = () => {
-    //  console.log("hello joined")
+    
     socket.emit("join-room", { emailId:email, roomId });
   };
 
