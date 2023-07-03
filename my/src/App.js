@@ -1,14 +1,13 @@
-
-import './App.css';
-import Room from './Pages/Room';
+import "./App.css";
+import Room from "./Pages/Room";
+import { SocketProvider } from "./Provider/Socket";
 
 function App() {
   return (
     <div className="App">
-     
-     {/* <h1> Hello   </h1> */}
-     <Room/>
-  
+      <SocketProvider>
+        <Room />
+      </SocketProvider>
     </div>
   );
 }
