@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { useSocket } from "../Provider/Socket";
 import {useNavigate} from "react-router-dom"
+import { useCallback } from "react";
 
 const Room = () => {
   const {socket} = useSocket();
@@ -21,14 +22,18 @@ const Room = () => {
   const [roomId, setRoomId] = useState(" ");
 
   
-     const roomhandle = ({roomId}) =>{
+     const roomhandle = useCallback(({roomId}) =>{
        console.log("joinned", roomId)
        navigate(`/room/${roomId}`)
-     } 
+     } ,[navigate])
 
       useEffect(() =>{
        socket.on("joined-room" , roomhandle)
-      },[socket])
+
+       return () => {
+        socket.off("joined-room", roomhandle);
+       };
+      },[roomhandle, socket])
 
   const handleJOinnedRoom = () => {
     
